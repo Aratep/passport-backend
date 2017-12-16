@@ -1,5 +1,5 @@
 const login = require('./login');
-// const signup = require('./signup');
+const signup = require('./signup');
 const User = require('../models/schemas/users');
 const jwt = require('jsonwebtoken');
 
@@ -8,12 +8,12 @@ function initialize (passport) {
     // Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function (user, done) {
         console.log('serializing user: ');
-        done(null, user)
-        // jwt.verify(user, 'secret_key', (err, decodedUser) => {
-        //     if (err) console.log(err);
-        //     console.log(decodedUser + '============================');
-        //     done(null, decodedUser._id);
-        // })
+        // done(null, user)
+        jwt.verify(user, 'secret_key', (err, decodedUser) => {
+            if (err) console.log(err);
+            console.log(decodedUser + '============================');
+            done(null, decodedUser._id);
+        })
     });
 
     passport.deserializeUser(function (id, done) {
@@ -27,7 +27,7 @@ function initialize (passport) {
 
     // Setting up Passport Strategies for Login and SignUp/Registration
     login(passport);
-    // signup(passport);
+    signup(passport);
 
 }
 

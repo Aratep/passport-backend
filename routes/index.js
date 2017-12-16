@@ -18,7 +18,18 @@ router.get('/token', (req, res, next) => {
     res.json({token})
 });
 
-router.post('/auth/register', register.sign_up);
+router.get('/auth/sign_in', (req, res, next) => {
+    console.log('req.flash(message)');
+    console.log(req.flash('message'));
+    res.status(401).json({message: req.flash('message')})
+})
+
+router.post('/auth/register', passport.authenticate('signup', {
+    successRedirect: '/list_all_users',
+    failureRedirect: '/auth/register',
+    failureFlash: true
+}));
+// router.post('/auth/register', register.sign_up);
 
 router.put('/auth/reset_password', auth.reset.reset_password);
 

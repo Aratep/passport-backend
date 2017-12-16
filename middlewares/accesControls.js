@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.access_controls = (req, res, next) => {
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', "http://localhost:3000");
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -17,6 +17,11 @@ router.access_controls = (req, res, next) => {
 
     // Access-Control-Allow-Origin: *
     // Pass to next layer of middleware
+    // if ('OPTIONS' === req.method) {
+    //     res.send(200);
+    // } else {
+    //     next();
+    // }
     next();
 };
 

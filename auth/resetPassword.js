@@ -9,6 +9,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 }
 
 const User = require('../models/schemas/users');
+const sendVerificationMail = require('../mailer/sendMail');
 
 router.reset_password = (req, res, next) => {
     console.log(req.body);
@@ -25,12 +26,14 @@ router.reset_password = (req, res, next) => {
                     {$or: [{'email': username}, {'username': username}]},
                     {$set: {hash_password: password, created: Date.now()}}
                 )
-                    .then(() => res.status(200).json({
+                    .then(() => {
+                        sendVerificationMail(user);
+                        res.status(200).json({
                             token: jwt.sign(
                                 {email: user.email, username: user.username, _id: user._id},
                                 'secret_key')
                         })
-                    )
+                    })
             }
         })
         .catch(err => console.log(err))
